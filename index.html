@@ -343,6 +343,12 @@
                     desc: "",
                     img: "Ex7HOUSING.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
                     analysis: "Contrario a los resultados en clasificación, en el problema de regresión (Housing), el Large-Batch (Size = 256) demostró ser la única configuración viable, alcanzando un 67% de acierto. Esto se debe al efecto de suavizado de gradientes: al promediar un gran número de muestras, el modelo logra mitigar el impacto de los outliers (valores atípicos de precios), generando actualizaciones de pesos estables que previenen la explosión del gradiente, un problema crítico detectado en este dataset con tasas de aprendizaje de 0.01"
+                },
+                exp8: {
+                    title: "Importancia de Atributos",
+                    desc: "",
+                    img: "Ex8HOUSING.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El análisis de importancia de atributos revela que la arquitectura profunda (Deep ReLU) adopta una estrategia de ponderación equilibrada, sin depender excesivamente de una única variable. La desviación mínima entre los atributos (rango 10.6% - 13.6%) demuestra que la red está integrando activamente las 8 dimensiones de entrada para construir sus representaciones internas, validando que no existen atributos redundantes o irrelevantes en el dataset."
                 }
             },
             covertype: {
@@ -389,6 +395,12 @@
                     desc: "",
                     img: "Ex7COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
                     analysis: "En el problema de clasificación multicategoría (Covertype), la configuración de Mini-Batch (Size = 32) demostró ser superior, alcanzando una precisión del 82%. A diferencia de la regresión, donde se requería suavizado, aquí el ruido estocástico moderado del Mini-Batch actuó como un mecanismo de exploración beneficioso, permitiendo al modelo navegar la compleja superficie de error de 54 dimensiones y escapar de mínimos locales sub-óptimos"
+                },
+                exp8: {
+                    title: "Importancia de Atributos",
+                    desc: "",
+                    img: "Ex8COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El análisis de importancia en Covertype revela una distribución altamente diluida, donde el atributo más influyente apenas alcanza un 3.7% de peso relativo. Esto contrasta radicalmente con los datasets anteriores y evidencia la alta complejidad entrópica del problema: la clasificación forestal no depende de un factor dominante, sino de la integración no lineal de más de 50 variables débiles. Esto valida la necesidad de la arquitectura profunda (4 capas ocultas) para sintetizar estas señales dispersas."
                 }
             },
             mnist: {
@@ -434,6 +446,12 @@
                     desc: "",
                     img: "Ex7MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
                     analysis: "La configuración de Mini-Batch (Size = 32) ofreció el perfil de aprendizaje más robusto, alcanzando una precisión superior al 94% desde la primera época. Esto se debe a la alta frecuencia de actualizaciones de pesos (1875 pasos por época), lo que permite al modelo ajustar su trayectoria mucho más rápido que las configuraciones de lote grande en las fases tempranas del entrenamiento."
+                },
+                exp8: {
+                    title: "Importancia de Atributos",
+                    desc: "",
+                    img: "Ex8MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "La visualización de mapa de calor revela que la red neuronal densa (Fully Connected) ha desarrollado una atención espacial selectiva. A pesar de no tener una estructura convolucional, el modelo aprendió a asignar la mayor magnitud de pesos a la región central de $20 \times 20$ píxeles, identificando correctamente que la información semántica (el trazo del dígito) se encuentra invariablemente centrada, ignorando el ruido periférico. A diferencia de los datos tabulares donde la importancia se distribuye discretamente, en MNIST la importancia sigue una distribución continua y topológica. La mancha central de alta importancia representa la densidad de probabilidad de ocurrencia de tinta. La red ha optimizado sus recursos para ser hipersensible en las áreas donde es estadísticamente probable que aparezca un trazo, imitando el funcionamiento de la fóvea biológica."
                 }
             }
         };
