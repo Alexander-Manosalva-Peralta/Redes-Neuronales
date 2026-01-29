@@ -285,6 +285,18 @@
                     desc: "",
                     img: "Ex6DIABETES.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
                     analysis: "El análisis de la desviación estándar de los pesos demuestra que la red evitó el colapso de características. El crecimiento controlado de la dispersión ( de 0.32 a 0.45) indica que las neuronas de la capa oculta se especializaron exitosamente en detectar patrones distintos en los datos clínicos, sin entrar en zonas de inestabilidad o explosión de pesos. Tambien, se valida la efectividad de la función de activación ReLU. El monitoreo de gradientes muestra que la señal de error fluyó hacia la primera capa manteniendo una magnitud saludable de orden 10^-2. No se observó desvanecimiento del gradiente, lo que explica por qué esta arquitectura alcanzó rápidamente el 75% de precisión. La distribución final de los pesos (Gaussiana centrada en cero) confirma que la inicialización 'He' fue la elección correcta. Mantuvo la varianza de las activaciones en un rango óptimo, facilitando que el optimizador SGD encontrara una solución robusta sin saturar las neuronas."
+                },
+                exp7: {
+                    title: "EXPERIMENTO 7: Análisis Adicionales",
+                    desc: "",
+                    img: "Ex7DIABETES.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El experimento demostró que el entrenamiento estocástico puro (Batch Size = 1) es altamente ineficiente tanto en tiempo como en rendimiento. Incrementó el tiempo de entrenamiento en un 291% (de 232s a 909s) respecto al Large Batch, y la volatilidad inducida por la actualización muestra a muestra impidió la convergencia, resultando en una precisión oscilante e inferior (< 65% promedio). Se identificó al Mini-Batch (Size = 32) como la configuración óptima. Logró superar la barrera de precisión del Large Batch, alcanzando un 77%, gracias a que introduce el nivel justo de ruido estocástico para escapar de mínimos locales, manteniendo al mismo tiempo la estabilidad necesaria para la convergencia y la eficiencia de la vectorización matricial."
+                },
+                exp8: {
+                    title: "Importancia de Atributos",
+                    desc: "",
+                    img: "Ex8DIABETES.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "A diferencia de la distribución homogénea observada en problemas de regresión (Housing), el modelo de clasificación de Diabetes exhibe una fuerte jerarquización de atributos. Los 5 predictores principales (Sex, HighBP, Age, GenHlth, BMI) concentran casi el 50% de la capacidad de decisión del modelo. Esto sugiere que la red neuronal ha logrado filtrar el ruido de las encuestas de salud para centrarse exclusivamente en los marcadores fisiológicos y demográficos de alto impacto"
                 }
             },
             housing: {
@@ -324,7 +336,13 @@
                     title: "EXPERIMENTACIÓN 6:",
                     desc: "",
                     img: "Ex6HOUSING.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
-                    analysis: "El experimento con el dataset de Housing (Regresión) demostró una sensibilidad extrema al Learning Rate, mucho mayor que en los problemas de clasificación. La tasa de eta=0.01 se identificó como el único punto operativo viable, logrando una precisión (tolerancia) cercana al 70%. La tasa conservadora (eta=0.0001) resultó funcional pero ineficiente, con una convergencia excesivamente lenta (45%). Crucialmente, tasas que fueron exitosas en otros datasets (como eta=0.1) resultaron letales aquí: tanto eta=0.1 como eta=1.0 causaron una divergencia inmediata (Accuracy 0%, Gradientes NaN), confirmando que la regresión no tolera pasos grandes. Se concluye que los problemas de regresión con salidas continuas no acotadas requieren una política de Learning Rate mucho más conservadora. A diferencia de la clasificación (donde Softmax/Sigmoide acotan el error), en regresión el error puede crecer indefinidamente, facilitando la explosión del gradiente. Para esta arquitectura Deep ReLU en regresión, el límite de estabilidad se encuentra estrictamente por debajo de $0.1$. La recomendación estratégica es iniciar con $\eta=0.01$ y estar preparado para reducirlo, jamás aumentarlo."
+                    analysis:"El análisis de la desviación estándar valida empíricamente la teoría de inicialización de Kaiming 	He. Los valores observados ( 0.5 para la capa de entrada y 0.17 para las ocultas) coinciden exactamente con el cálculo teórico (sqrt 2/n). La estabilidad de estas métricas a lo largo de las épocas confirma que el learning rate conservador (eta=0.01) evitó cualquier deriva o explosión de parámetros, algo crítico en problemas de regresión no acotados. El gráfico de flujo de gradientes demuestra una propagación de error casi perfecta. Se observa que la magnitud del gradiente en la primera capa es estadísticamente indistinguible de la última capa oculta. Esto confirma que la arquitectura profunda (4 capas) con ReLU se comporta como un bloque cohesivo, donde la profundidad no impuso ninguna penalización en la capacidad de entrenamiento de las capas inferiores. La distribución final de los pesos revela una arquitectura funcionalmente dividida: una primera capa con alta varianza encargada de la extracción de características agresivas, y una capa de salida con baja varianza encargada de la combinación lineal precisa. Esta estructura minimiza el error cuadrático medio (MSE) evitando oscilaciones en la predicción final."
+                },
+                exp7: {
+                    title: "EXPERIMENTO 7: Análisis Adicionales",
+                    desc: "",
+                    img: "Ex7HOUSING.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "Contrario a los resultados en clasificación, en el problema de regresión (Housing), el Large-Batch (Size = 256) demostró ser la única configuración viable, alcanzando un 67% de acierto. Esto se debe al efecto de suavizado de gradientes: al promediar un gran número de muestras, el modelo logra mitigar el impacto de los outliers (valores atípicos de precios), generando actualizaciones de pesos estables que previenen la explosión del gradiente, un problema crítico detectado en este dataset con tasas de aprendizaje de 0.01"
                 }
             },
             covertype: {
@@ -365,6 +383,12 @@
                     desc: "",
                     img: "Ex6COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
                     analysis: "A diferencia de los problemas de regresión donde los pesos permanecieron estáticos, en Covertype se observó un incremento progresivo en la desviación estándar de los pesos (de 0.2 a 0.35). Esto evidencia una alta plasticidad de la red: el modelo está modificando activamente la magnitud de sus conexiones para construir fronteras de decisión complejas en un espacio de 54 dimensiones. La red no solo está ajustando, está transformando la representación de los datos. El análisis de gradientes confirma por qué la arquitectura profunda superó a la superficial en este dataset. Se observa una propagación de gradiente robusta y sostenida en el orden de 10^-3 a 10^-2 en todas las capas. Crucialmente, los gradientes no decayeron con el tiempo, sino que mostraron una tendencia ascendente, indicando que la red continuó encontrando características discriminativas útiles a lo largo de las 30 épocas sin sufrir saturación. A pesar de la complejidad del modelo (4 capas ocultas) y el Learning Rate agresivo (eta=0.1), las distribuciones finales de pesos se mantuvieron Gaussianas y centradas en cero. Esto demuestra que la combinación de Inicialización He + Normalización de Datos + Activación ReLU es suficiente para mantener la estabilidad numérica incluso en problemas de clasificación multiclase exigentes."
+                },
+                exp7: {
+                    title: "EXPERIMENTO 7: Análisis Adicionales",
+                    desc: "",
+                    img: "Ex7COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "En el problema de clasificación multicategoría (Covertype), la configuración de Mini-Batch (Size = 32) demostró ser superior, alcanzando una precisión del 82%. A diferencia de la regresión, donde se requería suavizado, aquí el ruido estocástico moderado del Mini-Batch actuó como un mecanismo de exploración beneficioso, permitiendo al modelo navegar la compleja superficie de error de 54 dimensiones y escapar de mínimos locales sub-óptimos"
                 }
             },
             mnist: {
@@ -404,6 +428,12 @@
                     desc: "",
                     img: "Ex6MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
                     analysis: "El experimento con MNIST valida la precisión de la inicialización He en capas de alta dimensionalidad. La desviación estándar inicial de la primera capa (0.06) coincide con la predicción teórica para 784 entradas ($\sqrt{2/n_{in}}$). Esto demuestra que el algoritmo ajustó correctamente la escala de los pesos iniciales para compensar la gran cantidad de señales de entrada, evitando la saturación inmediata.El análisis de gradientes revela un perfil de convergencia clásico: una magnitud alta al inicio que decrece logarítmicamente. A diferencia de problemas más difíciles donde el gradiente aumenta buscando una solución (como en Covertype), en MNIST la reducción de la magnitud del gradiente es un indicador de éxito. La red minimizó el error rápidamente y pasó la mayor parte del entrenamiento en una fase de 'ajuste fino' (fine-tuning), confirmando por qué se alcanzaron precisiones superiores al 98%.Los histogramas finales muestran claramente cómo la red adapta la distribución de sus pesos inversamente a la dimensión de la entrada. La primera capa mantuvo una varianza muy baja para gestionar la entrada masiva de píxeles, mientras que las capas profundas expandieron su rango dinámico. Esta auto-regulación es clave para mantener la estabilidad numérica en redes profundas de visión artificial."
+                },
+                exp7: {
+                    title: "EXPERIMENTO 7: Análisis Adicionales",
+                    desc: "",
+                    img: "Ex7MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "La configuración de Mini-Batch (Size = 32) ofreció el perfil de aprendizaje más robusto, alcanzando una precisión superior al 94% desde la primera época. Esto se debe a la alta frecuencia de actualizaciones de pesos (1875 pasos por época), lo que permite al modelo ajustar su trayectoria mucho más rápido que las configuraciones de lote grande en las fases tempranas del entrenamiento."
                 }
             }
         };
