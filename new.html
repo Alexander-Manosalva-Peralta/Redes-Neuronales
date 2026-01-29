@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Redes Neuronales - Apple Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apple-blue: #0071e3;
+            --apple-glass: rgba(255, 255, 255, 0.7);
+            --apple-border: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: radial-gradient(circle at 50% 0%, #f5f5f7 0%, #ffffff 100%);
+            color: #1d1d1f;
+            scroll-behavior: smooth;
+        }
+
+        /* Efecto Glassmorphism */
+        .glass {
+            background: var(--apple-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--apple-border);
+        }
+
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--apple-border);
+        }
+
+        /* Cards de Inicio */
+        .dataset-card {
+            border-radius: 24px;
+            transition: all 0.5s cubic-bezier(0.15, 0.83, 0.66, 1);
+            overflow: hidden;
+            background: white;
+            border: 1px solid var(--apple-border);
+        }
+
+        .dataset-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+        }
+
+        /* Botones de menú de experimentos */
+        .menu-btn {
+            padding: 12px 28px;
+            border-radius: 980px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .menu-btn.active {
+            background: var(--apple-blue);
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 113, 227, 0.3);
+        }
+
+        .menu-btn:not(.active) {
+            background: rgba(0, 0, 0, 0.05);
+            color: #86868b;
+        }
+
+        .menu-btn:hover:not(.active) {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Contenedor de Imagen de Experimento */
+        .exp-image-box {
+            background: #fbfbfd;
+            border-radius: 32px;
+            padding: 24px;
+            border: 1px solid var(--apple-border);
+            margin: 24px 0;
+            transition: all 0.4s ease;
+        }
+
+        .exp-image-box img {
+            width: 100%;
+            height: auto;
+            border-radius: 18px;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .fade-in { animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .code-window {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    padding: 20px;
+    border-radius: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    border: 1px solid #333;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    margin-top: -20px;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Navegación -->
+    <nav class="nav-glass fixed top-0 w-full z-50 py-3">
+        <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+            <div class="text-xl font-bold tracking-tighter">Metodos<span class="text-blue-600">Numericos</span></div>
+            <div class="flex gap-8 text-[11px] font-bold uppercase tracking-widest text-gray-500">
+                <a href="#inicio" class="hover:text-black transition-colors">Inicio</a>
+                <a href="#experimentos" class="hover:text-black transition-colors">Experimentos</a>
+                <a href="#conclusiones" class="hover:text-black transition-colors">Conclusiones</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Inicio -->
+    <header id="inicio" class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h1 class="text-6xl md:text-8xl section-title mb-6">Redes Neuronales</h1>
+            <p class="text-2xl text-gray-400 max-w-3xl mx-auto">Experimentacion de entrenamiento de una red neuronal en conjunto de datos reales.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Dataset 1 -->
+            <div class="dataset-card flex flex-col">
+                <div class="h-48 bg-gray-100">
+                    <img src="card_diabetes.jpg" alt="Diabetes" class="w-full h-full object-cover" onerror="this.src='https://i.pinimg.com/736x/8c/be/d0/8cbed0cff25b14a4a4e4e7f81990a7ac.jpg'">
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <span class="text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-2">Binario</span>
+                    <h3 class="text-2xl font-bold mb-4">Diabetes Indicators</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Clasificación binaria para predecir riesgo de diabetes basado en indicadores del CDC.</p>
+                    <a href="https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators" target="_blank" class="mt-auto inline-flex items-center text-blue-600 font-semibold hover:underline">
+                        UCI Repository ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dataset 2 -->
+            <div class="dataset-card flex flex-col">
+                <div class="h-48 bg-gray-100">
+                    <img src="card_housing.jpg" alt="Housing" class="w-full h-full object-cover" onerror="this.src='https://i.pinimg.com/736x/a0/56/2b/a0562bfdcc23a3364573cc1ebfe80868.jpg'">
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <span class="text-green-600 text-[10px] font-bold uppercase tracking-widest mb-2">Regresion</span>
+                    <h3 class="text-2xl font-bold mb-4">California Housing</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Regresión para estimar el valor medio de viviendas basado en geolocalización.</p>
+                    <a href="https://www.kaggle.com/datasets/camnugent/california-housing-prices?hl=es-US" target="_blank" class="mt-auto inline-flex items-center text-blue-600 font-semibold hover:underline">
+                        Dataset Info ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dataset 3 -->
+            <div class="dataset-card flex flex-col">
+                <div class="h-48 bg-gray-100">
+                    <img src="card_covertype.jpg" alt="Covertype" class="w-full h-full object-cover" onerror="this.src='https://i.pinimg.com/736x/15/2d/b0/152db0b032b90c26d07648094d9e2754.jpg'">
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <span class="text-orange-600 text-[10px] font-bold uppercase tracking-widest mb-2">Multiclase</span>
+                    <h3 class="text-2xl font-bold mb-4">Forest Covertype</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Clasificación de 7 tipos de cobertura forestal a partir de datos cartográficos.</p>
+                    <a href="https://archive.ics.uci.edu/dataset/31/covertype" target="_blank" class="mt-auto inline-flex items-center text-blue-600 font-semibold hover:underline">
+                        UCI Repository ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dataset 4 -->
+            <div class="dataset-card flex flex-col">
+                <div class="h-48 bg-gray-100">
+                    <img src="card_mnist.jpg" alt="MNIST" class="w-full h-full object-cover" onerror="this.src='https://i.pinimg.com/736x/9c/0e/9d/9c0e9dd584487233ee29bb4970371ac3.jpg'">
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <span class="text-purple-600 text-[10px] font-bold uppercase tracking-widest mb-2">Multiclase</span>
+                    <h3 class="text-2xl font-bold mb-4">MNIST Digits</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Reconocimiento de dígitos manuscritos (0-9) mediante 784 píxeles de entrada.</p>
+                    <a href="http://yann.lecun.com/exdb/mnist/" target="_blank" class="mt-auto inline-flex items-center text-blue-600 font-semibold hover:underline">
+                        Lecun Official ↗
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de Experimentos -->
+    <section id="experimentos" class="py-24 bg-white border-t border-gray-100">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-blue-600 mb-4">Dashboard Técnico</h2>
+                <h3 class="text-4xl font-bold mb-10">Resultados por Conjunto de Datos</h3>
+
+                <!-- Menú de Selección -->
+                <div class="flex flex-wrap justify-center gap-4 mb-16 p-2 glass rounded-[40px] w-fit mx-auto">
+                    <button onclick="updateExp('diabetes')" class="menu-btn active" id="btn-diabetes">Diabetes</button>
+                    <button onclick="updateExp('housing')" class="menu-btn" id="btn-housing">Housing</button>
+                    <button onclick="updateExp('covertype')" class="menu-btn" id="btn-covertype">Covertype</button>
+                    <button onclick="updateExp('mnist')" class="menu-btn" id="btn-mnist">MNIST</button>
+                </div>
+            </div>
+
+
+            <!-- Contenido Dinámico de Experimentos -->
+            <div id="dynamic-exp-content" class="fade-in">
+                <!-- Se inyecta por JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusiones -->
+    <section id="conclusiones" class="py-32 px-6 bg-gray-50">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-5xl font-extrabold mb-12 tracking-tight">Conclusiones Finales.</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass p-10 rounded-[32px] border-none shadow-sm">
+                    <h4 class="text-xl font-bold mb-4">Optimización de Pesos</h4>
+                    <p class="text-gray-500 leading-relaxed italic">"La inicialización de Xavier y He demostró ser la única capaz de mantener la varianza de las activaciones en niveles saludables, evitando el estancamiento observado en la inicialización aleatoria simple."</p>
+                </div>
+                <div class="glass p-10 rounded-[32px] border-none shadow-sm">
+                    <h4 class="text-xl font-bold mb-4">Impacto de la Activación</h4>
+                    <p class="text-gray-500 leading-relaxed italic">"ReLU superó a la Sigmoide en todos los datasets con redes de más de 2 capas, confirmando que la linealidad parcial es clave para combatir el desvanecimiento del gradiente."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-20 text-center text-gray-400 text-[10px] font-bold uppercase tracking-widest">
+        © 2026 Métodos Numéricos | Reporte de Redes Neuronales
+    </footer>
+
+    <script>
+
+        const data = {
+            diabetes: {
+                name: "Diabetes Health",
+                color: "#0071e3",
+                exp1: {
+                    title: "EXPERIMENTO 1: VARIACIÓN EN LA INICIALIZACIÓN DE PESOS",
+                    desc: "En un escenario de 21 entradas y un learning rate de 0.01, se prevé que las inicializaciones Xavier y He lideren la convergencia seguidas de cerca por Standard, mientras que la inicialización en Ceros quedará estancada en un 50% de accuracy debido a la simetría de la red.",
+                    img: "initDatasetDIABETES.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "Mientras la hipótesis preveía que Ceros fallaría y que Standard/Xavier convergerían de forma progresiva, los resultados reales mostraron un comportamiento caótico para la inicialización en Ceros, que alternó violentamente entre el 86% y el 13% de precisión, confirmando la incapacidad de encontrar el punto medio del gradiente. Por su parte, Standard (71.67%), Xavier (71.99%) y He (72.31%) arrojaron resultados casi idénticos. La conclusión específica es que en problemas simples y balanceados, la diferencia entre los métodos es marginal, mientras que Ceros resulta inútil al rebotar solo entre sesgos extremos sin converger."
+                },
+                exp2: {
+                    title: "EXPERIMENTO 2: EXPERIMENTOS DE PROFUNDIDAD (DEPTH)",
+                    desc: "La hipótesis central es que, si bien una red profunda (Deep, 4 capas) debería teóricamente abstraer mejor las características, la función Sigmoide inhibe el aprendizaje profundo debido al desvanecimiento del gradiente. Se predice que la red superficial (Shallow, 1 capa) tendrá un aprendizaje más rápido y estable, liderando la precisión, mientras que la red profunda se estancará. La prueba clave residirá en los gradientes: la capa superficial mantendrá valores saludables, mientras que la primera capa de la red profunda mostrará valores cercanos a cero, demostrando que la señal de error no logra retropropagarse efectivamente.",
+                    img: "ExPROFUNDIDADdiabetis.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "La red alcanzó estabilidad rápidamente. Una capa oculta fue suficiente para este volumen de datos."
+                },
+                exp3: {
+                    title: "EXPERIMENTOS 3: DE ANCHURA (WIDTH)",
+                    desc: "Para el dataset DIABETES en un problema de clasificación binaria, considerado relativamente simple, se predice que la red Narrow (8 neuronas) puede funcionar adecuadamente, ya que no es necesario modelar patrones complejos. La red Wide (128 neuronas) también tendrá buen desempeño, pero probablemente no muestre una mejora significativa frente a la configuración Balanced, e incluso podría presentar un ligero overfitting al aprender ruido; sin embargo, al evaluarse en datos de test, su rendimiento debería verse igual o apenas superior.",
+                    img: "anchudia.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "En el dataset Diabetes, entrenado con SMOTE y evaluado en un test desbalanceado (86% / 14%), las redes Narrow, Balanced y Wide muestran rendimientos casi idénticos, con precisiones entre 71% y 73%, confirmando que aumentar la anchura aporta menos del 1% de mejora. Esto valida que una red Narrow es suficiente para este problema poco complejo. La red Wide presenta picos más altos pero mayor inestabilidad, señal de ligero overfitting al ruido del entrenamiento balanceado. En los gradientes, la red Narrow mantiene valores iniciales más altos porque cada neurona es crítica, mientras que en la Wide el error se reparte entre muchas neuronas, produciendo gradientes iniciales más bajos."
+                },
+                exp4: {
+                    title: "EXPERIMENTOS 4:",
+                    desc: "La arquitectura [Input, 16, Output] corresponde a una red con una sola capa oculta de 16 neuronas, diseñada para un problema de baja complejidad. No es lo suficientemente pequeña como para generar un cuello de botella, ni tan grande como para introducir capacidad innecesaria, por lo que define un escenario base neutral para evaluar el comportamiento del modelo",
+                    img: "Ex4Diabetis.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "Los resultados muestran la muerte por profundidad al usar Sigmoide: incluso con redes de solo 4 capas, una inicialización estándar y learning rate bajo provocan vanishing gradient, impidiendo que la red aprenda y haciendo que oscile entre las probabilidades a priori de las clases (14% vs 86%). En contraste, ReLU y Tanh demostraron ser robustas a este problema a esa profundidad, manteniendo normas de gradiente altas y estables y logrando una convergencia rápida y consistente al 72–73% de accuracy. En este caso particular, Tanh mostró gradientes ligeramente superiores a ReLU en el escenario Shallow, lo que la convierte en una excelente alternativa para redes no muy profundas, aunque ReLU sigue siendo el estándar para redes mucho más profundas (20+ capas). Como recomendación, para el problema de Diabetes basta usar ReLU o Tanh con una arquitectura Shallow (1 capa); profundizar no aporta mejoras y usar Sigmoide rompe el modelo."
+                },
+                exp5: {
+                    title: "EXPERIMENTO 5: VARIACIÓN EN EL LEARNING RATE",
+                    desc: "Arquitectura Empleada:Arq: [16] | Activación: ReLU (He Init)",
+                    img: "Ex5DIABETES.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El experimento identifica a la tasa de aprendizaje intermedia (eta=0.1) como la clara ganadora, alcanzando los picos máximos de precisión (~75%) y mostrando una curva de aprendizaje activa, a diferencia de la tasa conservadora (eta=0.001) que se estancó en una línea plana alrededor del 72%. En contraste, las tasas agresivas (eta=1.5 y 3.0) resultaron desastrosas: la configuración de 3.0 provocó una inestabilidad crítica, con caídas de precisión por debajo del 50% (peor que el azar), y reveló un hallazgo contraintuitivo en el gráfico de gradientes: las tasas más altas generaron la fuerza de gradiente más débil, cayendo por debajo de 2 x 10 en escala logarítmica. La evidencia confirma que el uso de tasas de aprendizaje excesivas (>= 1.5) en combinación con la activación ReLU desencadena el fenómeno de Neuronas Muertas (Dying ReLU). Las actualizaciones violentas de los pesos empujaron a las neuronas a una zona negativa permanente donde la derivada es cero, matando el flujo del gradiente y la capacidad de aprendizaje de la red (explicando por qué la fuerza del gradiente es tan baja en las líneas roja y morada). Se concluye que para esta arquitectura, el sweet spot reside en 0.1, el único punto que equilibra la plasticidad necesaria para mejorar con la estabilidad requerida para no destruir el conocimiento previo."
+                },
+                exp6: {
+                    title: "EXPERIMENTACIÓN 6:",
+                    desc: "",
+                    img: "Ex6DIABETES.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El análisis de la desviación estándar de los pesos demuestra que la red evitó el colapso de características. El crecimiento controlado de la dispersión ( de 0.32 a 0.45) indica que las neuronas de la capa oculta se especializaron exitosamente en detectar patrones distintos en los datos clínicos, sin entrar en zonas de inestabilidad o explosión de pesos. Tambien, se valida la efectividad de la función de activación ReLU. El monitoreo de gradientes muestra que la señal de error fluyó hacia la primera capa manteniendo una magnitud saludable de orden 10^-2. No se observó desvanecimiento del gradiente, lo que explica por qué esta arquitectura alcanzó rápidamente el 75% de precisión. La distribución final de los pesos (Gaussiana centrada en cero) confirma que la inicialización 'He' fue la elección correcta. Mantuvo la varianza de las activaciones en un rango óptimo, facilitando que el optimizador SGD encontrara una solución robusta sin saturar las neuronas."
+                }
+            },
+            housing: {
+                name: "California Housing",
+                color: "#34c759",
+                exp1: {
+                    title: "EXPERIMENTO 1: VARIACIÓN EN LA INICIALIZACIÓN DE PESOS",
+                    desc: "Para el escenario de regresión con el dataset Housing, se anticipa que la inicialización Xavier será la opción más eficiente, garantizando una convergencia estable y un error inicial reducido gracias al control de la varianza de los pesos. Mientras que la inicialización Standard podría presentar un inicio ruidoso con errores elevados debido a la magnitud de sus pesos aleatorios, se espera que logre corregirse durante el entrenamiento. En contraste, la inicialización en Zeros tenderá a predecir el promedio, lo que resultaría en un MSE estancado y una métrica de tolerancia engañosa (40-50%), confirmando una jerarquía de rendimiento donde Xavier y He presentan curvas más suaves frente a la inestabilidad de Standard y la ineficacia de Zeros",
+                    img: "Ex1housing.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "Se confirma la hipótesis mientras la inicialización en Zeros presenta una precisión engañosa del 58%, su MSE de 0.0216 es el más deficiente del grupo. En contraste, Xavier (64.6%, MSE 0.0177) y He (64.8%, MSE 0.0179) demostraron una superioridad, logrando los errores cuadráticos más bajos y una estabilidad notable; específicamente, Xavier exhibió la curva de aprendizaje más limpia desde el inicio del entrenamiento. Por su parte, la inicialización Standard finalizó con métricas competitivas (62.9%, MSE 0.0192), aunque con un error inicial elevado (0.056) que requirió una corrección progresiva durante el proceso"
+                },
+                exp2: {
+                    title: "EXPERIMENTO 2: EXPERIMENTOS DE PROFUNDIDAD (DEPTH)",
+                    desc: "Comparación de Rendimiento",
+                    img: "Ex2Housing.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El análisis de rendimiento y gradientes con activación Sigmoide demuestra que la profundidad es perjudicial sin técnicas modernas. La red Shallow (1 capa) logró un éxito rotundo, subiendo saludablemente del 49% al 60% de accuracy con un flujo de gradiente saludable (de 0.022 a 0.011). En contraste, la red Deep (4 capas) sufrió una muerte cerebral confirmada, manteniéndose plana entre 30-33%, debido a que la señal de error desaparece matemáticamente en la primera capa: la regla de la cadena reduce el gradiente a un valor nulo (aprox 0.000039) tras multiplicarse la derivada de 0.25 cuatro veces y por el bajo learning rate. Adicionalmente, el análisis de anchura muestra que la capacidad impacta la velocidad de convergencia inicial; la red estrecha (Narrow) comenzó con un rendimiento un 20% inferior a la red ancha (Wide), requiriendo gradientes más agresivos para compensar su menor capacidad de representación"
+                },
+                exp3: {
+                    title: "EXPERIMENTOS 3: DE ANCHURA (WIDTH)",
+                    desc: "Para el dataset HOUSING en un problema de regresión, con 8 variables de entrada, se plantea que la anchura de la red influye directamente en su desempeño. Se predice que la configuración Narrow (8 neuronas) actuará como un cuello de botella, ya que la red intentará comprimir el conocimiento y perderá detalles importantes, lo que se reflejará en el peor desempeño, es decir, un MSE más alto (o menor accuracy). En contraste, la configuración Wide (128 neuronas) contará con capacidad de sobra, lo que le permitirá aprender más rápido los patrones sutiles del precio, siendo la ganadora clara del experimento, mientras que la configuración Balanced se ubicará en un punto intermedio entre ambas",
+                    img: "Ex3housing.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "En el experimento de anchura para este dataset, se confirmó que la red Narrow (8 neuronas) sufre un cuello de botella, iniciando con un rendimiento muy bajo (≈37%) y necesitando unas 10 épocas para alcanzar a las demás, debido a su limitada capacidad de representación y a gradientes iniciales muy altos que reflejan el esfuerzo de pocas neuronas por corregir un gran error. La red Wide (128 neuronas), aunque más inestable, alcanza los mejores picos de rendimiento (>64%), mientras que la red Balanced se mantiene como la más estable alrededor del 60%. En conclusión, una mayor anchura mejora la capacidad y los resultados máximos en regresión, mientras que igualar la anchura al número de entradas (8 - 8) ralentiza el aprendizaje inicial y la convergencia, mostrando una desventaja inicial cercana al 20% frente a la red ancha."
+                },
+                exp4: {
+                    title: "EXPERIMENTOS 4: ",
+                    desc: "La arquitectura [Input, 128, Output] define una red con una sola capa oculta de 128 neuronas, adecuada para regresión con relaciones continuas. Proporciona capacidad suficiente para modelar variaciones del precio sin requerir profundidad, evitando tanto la subrepresentación como el sobreajuste estructural, y sirve como baseline estable.",
+                    img: "Ex4HOUSING.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "En Housing (regresión) se confirma la inviabilidad de Sigmoide en redes profundas: su derivada limitada y no estar centrada en cero provocan vanishing gradientes, dejando a la red con un rendimiento ~50% inferior. En contraste, Tanh resulta una sorpresa positiva, ya que empata con ReLU al estar centrada en cero, lo que encaja mejor con datos normalizados y facilita la optimización. ReLU se consolida como el estándar más robusto, gracias a la inicialización He y a gradientes estables que evitan el desvanecimiento y aceleran el aprendizaje. Conclusión: para este dataset, arquitecturas profundas (4 capas) con ReLU o Tanh son viables y estables, mientras que Sigmoide debe evitarse."
+                },
+                exp5: {
+                    title: "EXPERIMENTO 5: VARIACIÓN EN EL LEARNING RATE",
+                    desc: "",
+                    img: "Ex5HOUSING.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El experimento con el dataset de Housing (Regresión) demostró una sensibilidad extrema al Learning Rate, mucho mayor que en los problemas de clasificación. La tasa de eta=0.01 se identificó como el único punto operativo viable, logrando una precisión (tolerancia) cercana al 70%. La tasa conservadora (eta=0.0001) resultó funcional pero ineficiente, con una convergencia excesivamente lenta (45%). Crucialmente, tasas que fueron exitosas en otros datasets (como eta=0.1) resultaron letales aquí: tanto eta=0.1 como eta=1.0 causaron una divergencia inmediata (Accuracy 0%, Gradientes NaN), confirmando que la regresión no tolera pasos grandes. Se concluye que los problemas de regresión con salidas continuas no acotadas requieren una política de Learning Rate mucho más conservadora. A diferencia de la clasificación (donde Softmax/Sigmoide acotan el error), en regresión el error puede crecer indefinidamente, facilitando la explosión del gradiente. Para esta arquitectura Deep ReLU en regresión, el límite de estabilidad se encuentra estrictamente por debajo de $0.1$. La recomendación estratégica es iniciar con $\eta=0.01$ y estar preparado para reducirlo, jamás aumentarlo."
+                },
+                exp6: {
+                    title: "EXPERIMENTACIÓN 6:",
+                    desc: "",
+                    img: "Ex5HOUSING.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El experimento con el dataset de Housing (Regresión) demostró una sensibilidad extrema al Learning Rate, mucho mayor que en los problemas de clasificación. La tasa de eta=0.01 se identificó como el único punto operativo viable, logrando una precisión (tolerancia) cercana al 70%. La tasa conservadora (eta=0.0001) resultó funcional pero ineficiente, con una convergencia excesivamente lenta (45%). Crucialmente, tasas que fueron exitosas en otros datasets (como eta=0.1) resultaron letales aquí: tanto eta=0.1 como eta=1.0 causaron una divergencia inmediata (Accuracy 0%, Gradientes NaN), confirmando que la regresión no tolera pasos grandes. Se concluye que los problemas de regresión con salidas continuas no acotadas requieren una política de Learning Rate mucho más conservadora. A diferencia de la clasificación (donde Softmax/Sigmoide acotan el error), en regresión el error puede crecer indefinidamente, facilitando la explosión del gradiente. Para esta arquitectura Deep ReLU en regresión, el límite de estabilidad se encuentra estrictamente por debajo de $0.1$. La recomendación estratégica es iniciar con $\eta=0.01$ y estar preparado para reducirlo, jamás aumentarlo."
+                }
+            },
+            covertype: {
+                name: "Forest Covertype",
+                color: "#ff9500",
+                exp1: {
+                    title: "EXPERIMENTO 1: VARIACIÓN EN LA INICIALIZACIÓN DE PESOS",
+                    desc: "Debido a que el learning rate de 0.01 es críticamente bajo para este escenario de 54 entradas y 7 clases, se prevé que las inicializaciones Standard, Xavier y He presenten una convergencia lenta y progresiva alcanzando apenas un 60% de accuracy tras 20 épocas, mientras que la inicialización en Ceros se mantendrá estancada en el porcentaje de la clase mayoritaria (50%) sin capacidad de aprendizaje",
+                    img: "Ex1Covertye.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "La inicialización en Ceros se mantuvo plana exactamente en 48.78% de accuracy, confirmando su ineficacia. Standard, por su parte, demostró un rendimiento inicial deficiente (9.76%) debido a pesos aleatorios grandes que resultaron en predicciones arbitrarias, aunque finalmente alcanzó un 64.38%. Las inicializaciones Xavier (64.61%) y He (65.08%) fueron superiores en estabilidad y seguridad, empezando cerca del rendimiento aleatorio (48%) y convergiendo suavemente, lo que subraya su ventaja en eficiencia y control de pesos."
+                },
+                exp2: {
+                    title: "EXPERIMENTO 2: EXPERIMENTOS DE PROFUNDIDAD (DEPTH)",
+                    desc: "La hipótesis central es que, si bien una red profunda (Deep, 4 capas) debería teóricamente abstraer mejor las características, la función Sigmoide inhibe el aprendizaje profundo debido al desvanecimiento del gradiente. Se predice que la red superficial (Shallow, 1 capa) tendrá un aprendizaje más rápido y estable, liderando la precisión, mientras que la red profunda se estancará. La prueba clave residirá en los gradientes: la capa superficial mantendrá valores saludables, mientras que la primera capa de la red profunda mostrará valores cercanos a cero, demostrando que la señal de error no logra retropropagarse efectivamente.",
+                    img: "Ex2COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "Los resultados confirman que la activación Sigmoide inhibe el aprendizaje profundo debido al desvanecimiento del gradiente. Mientras la red Shallow (1 capa) logró converger hasta un 64% de accuracy gracias a un gradiente saludable (0.025), las arquitecturas Medium y Deep permanecieron estancadas en el 48.5% (clase mayoritaria). La evidencia visual es concluyente: en la red de 4 capas, la fuerza del gradiente es nula (0.000) debido a la atenuación exponencial del error (0.25^4 times 0.01approx 0), lo que deja a las capas iniciales sin capacidad de ajuste. En conclusión, aumentar la profundidad bajo estas condiciones resulta contraproducente, volviendo al modelo ciego ante el error y demostrando la necesidad de técnicas modernas como ReLU o Batch Normalization para viabilizar redes profundas."
+                },
+                exp3: {
+                    title: "EXPERIMENTOS 3: DE ANCHURA (WIDTH)",
+                    desc: "Para el dataset Covertype (clasificación multiclase), la anchura de la capa oculta influye directamente en el desempeño del modelo. En la configuración Narrow (10 neuronas) se genera un cuello de botella, ya que las 54 características de entrada se comprime excesivamente a solo 10 neuronas, lo que provoca una pérdida significativa de información y, como consecuencia, se espera que obtenga el peor Accuracy entre las configuraciones evaluadas. En contraste, la configuración Wide (128 neuronas) es la mejor opción, porque al expandir las 54 entradas a 128 neuronas se incrementa la capacidad representacional de la red, facilitando el aprendizaje de hiperplanos más complejos que permiten una mejor separación de las 7 clases, logrando un rendimiento superior.",
+                    img: "Ex3COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "Los resultados confirman la hipótesis inicial:  en la gráfica de Accuracy, la red Narrow parte con un rendimiento muy bajo, mejora rápido pero se estanca en 58%, quedando un gap del 6% frente a Balanced y Wide, que alcanzan cerca del 64%. Ambas configuraciones más anchas muestran curvas estables y prácticamente empatadas, lo que indica que 64 neuronas son suficientes y que aumentar a 128 entra en rendimientos decrecientes. En la gráfica de gradientes, Narrow presenta una caída abrupta al converger temprano a un sub-óptimo, mientras que Balanced y Wide mantienen gradientes activos, señal de mayor capacidad de optimización. En conclusión, el experimento confirma el Cuello de Botella: para Covertype, la capa oculta debe tener una dimensión similar a la entrada (54 → 64), ya que reducirla a 10 neuronas provoca underfitting estructural."
+                },
+                exp4: {
+                    title: "EXPERIMENTOS 4: ",
+                    desc: "La arquitectura [Input, 64, Output] corresponde a una red shallow con 64 neuronas ocultas, una dimensión comparable a las 54 variables de entrada. Esto evita una compresión excesiva de la información y, al mismo tiempo, no introduce sobrecapacidad, estableciendo un punto de referencia equilibrado para analizar el efecto de la profundidad.",
+                    img: "Ex4COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "En Covertype, se demuestra que la profundidad sí aporta beneficios bajo las condiciones correctas: por primera vez, Deep + ReLU (77%) supera a Shallow + ReLU (74%), lo que se explica por la alta complejidad del dataset (54 variables y relaciones no lineales) que requiere capas adicionales para modelarse adecuadamente. Este beneficio estaba oculto cuando se usaba Sigmoide, ya que el desvanecimiento del gradiente anulaba el aprendizaje; ReLU libera ese potencial. Se confirma nuevamente que Sigmoide es inservible en redes profundas, al provocar aprendizaje nulo y estancamiento en la clase mayoritaria. Tanh emerge como un competidor sólido, muy superior a Sigmoide y cercano a ReLU gracias a su centrado en cero, aunque sin igualar su robustez. Recomendación final: para Covertype, la mejor configuración es una arquitectura profunda (4+ capas) con activación ReLU, que entrega la mayor precisión de toda la práctica."
+                },
+                exp5: {
+                    title: "EXPERIMENTO 5: VARIACIÓN EN EL LEARNING RATE",
+                    desc: "",
+                    img: "Ex5COVERTYE.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El experimento en Covertype demostró la volatilidad extrema de las arquitecturas profundas (Deep ReLU) ante tasas de aprendizaje agresivas. Mientras que la tasa óptima (eta=0.1) logró un rendimiento superior del 81%, las tasas de eta=1.5 y eta=3.0 provocaron una explosión inmediata del gradiente (Gradient Explosion), resultando en valores NaN y un colapso total del modelo a un estado inerte del 37% de precisión desde la primera época. La tasa conservadora (eta=0.001) garantizó estabilidad, pero con un coste de oportunidad de 10 puntos porcentuales menos de precisión en el mismo tiempo de cómputo. Se concluye que en arquitecturas profundas no acotadas (como las que usan ReLU), existe una frontera crítica de estabilidad numérica. Cruzar este umbral con el Learning Rate provoca un desbordamiento matemático (Overflow) irreversible. Por tanto, para este problema multicategoría complejo, la estrategia dominante es maximizar el Learning Rate justo por debajo del umbral de explosión (en el rango 10^-1), descartando tasas superiores a $1.0$ como matemáticamente inviables."
+                }
+            },
+            mnist: {
+                name: "MNIST Digits",
+                color: "#af52de",
+                exp1: {
+                    title: "EXPERIMENTO 1: VARIACIÓN EN LA INICIALIZACIÓN DE PESOS",
+                    desc: "En el escenario crítico de MNIST (784 entradas), se anticipa que la combinación de un learning rate de 0.01 y la función Sigmoide provocará el colapso de la inicialización Standard; esto ocurre porque los pesos aleatorios generan valores de activación extremos que saturan la función, anulando el gradiente e impidiendo cualquier ajuste efectivo. Mientras que la inicialización en Ceros está destinada al fracaso (10-11%), se proyecta que Xavier y He logren evitar esta saturación al escalar los pesos según la dimensionalidad de entrada, permitiendo un aprendizaje progresivo que, aunque ralentizado por el bajo eta, superará drásticamente al rendimiento nulo de las configuraciones Standard y Zeros.",
+                    img: "Ex1MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "Los resultados del dataset MNIST validaron las predicciones: la inicialización en Ceros no aprendió nada, quedándose en 11.35% de accuracy. La inicialización Standard demostró el desastre predicho, iniciando en 9% y subiendo agónicamente hasta un 41.29%; esto confirma que carece de eficacia en redes con alta dimensionalidad si no se emplean learning rates altos. En contraste, Xavier (84.91%) y He (86.44%) demostraron su superioridad al multiplicar por dos el rendimiento de Standard, lo que subraya su estabilidad intrínseca y su capacidad para manejar la complejidad del problema."
+                },
+                exp2: {
+                    title: "EXPERIMENTO 2: EXPERIMENTOS DE PROFUNDIDAD (DEPTH)",
+                    desc: "Para el conjunto de datos MNIST (784 entradas), se predice que la red profunda de 4 capas presentará un rendimiento significativamente inferior a la red superficial. Aunque la inicialización Xavier evitará el colapso inmediato en la época 0, se anticipa que será incapaz de contrarrestar la degradación matemática impuesta por la función Sigmoide en las etapas posteriores. Esta convergencia deficiente validará la hipótesis del desvanecimiento del gradiente en escenarios de alta dimensionalidad",
+                    img: "Ex2MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El análisis de MNIST confirma la parálisis por desvanecimiento del gradiente en redes profundas bajo alta dimensionalidad. Mientras la red Shallow (1 capa) logró un desempeño estelar subiendo del 10% al 90% gracias al libre flujo del gradiente, la red Medium (2 capas) evidenció la dificultad de entrenamiento al sufrir inicialmente antes de alcanzar el 70%. Por su parte, la red Deep (4 capas) experimentó una convergencia nula, permaneciendo plana en 11.3% (azar). Se puede llegar a concluir que frente al gradiente saludable de la red Shallow (0.15), la red Deep se mantuvo clavada en 0.000. Matemáticamente, el error se disipa al atravesar cuatro funciones sigmoides, impidiendo el ajuste de los pesos de entrada y validando por qué el Deep Learning depende de activaciones como ReLU para superar la saturación."
+                },exp3: {
+                    title: "EXPERIMENTOS 3: DE ANCHURA (WIDTH)",
+                    desc: "Con 54 variables de entrada, se predice que la red Narrow (8 neuronas) fallaría por un Cuello de Botella de Información, ya que comprimir decenas de variables en solo 8 neuronas implica una pérdida inevitable de información, impidiendo que la red represente adecuadamente los patrones necesarios para el aprendizaje.",
+                    img: "Ex3MINIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "La red Narrow (8 neuronas) comienza con un rendimiento muy bajo (aprox 20%), aprende más lento y, aunque alcanza aprox 85%, muestra una limitada capacidad de abstracción. En cambio, las redes Balanced (32) y Wide (128) llegan a aprox 90%, destacando Wide por su mejor arranque (aprox 50%), gracias a su mayor capacidad para captar correlaciones simples rápidamente. En los gradientes, todos crecen con el tiempo; Wide mantiene la norma más alta, indicando una corrección de pesos más eficiente, mientras que Narrow inicia con el gradiente más bajo (aprox 0.06), evidenciando confusión y dificultad inicial para optimizar."
+                },
+                exp4: {
+                    title: "EXPERIMENTOS 4: ",
+                    desc: "La arquitectura [Input, 128, Output] define una red con alta capacidad acorde a las 784 entradas del problema. No genera un cuello de botella temprano y permite aprender patrones visuales básicos de forma estable, funcionando como un escenario base sólido frente a arquitecturas más profundas.",
+                    img: "Ex4MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "En el Experimento 4 se confirma que la Sigmoide es incompatible con arquitecturas profundas (>2 capas): en los cuatro datasets el vanishing gradient (gradientes cercanos a cero) impidió el aprendizaje, dejando a la red estancada en el azar (MNIST, Covertype) o en la media (Housing). ReLU se consolida como la función más robusta, ya que permitió que las redes profundas superaran a las superficiales en Covertype y MNIST, con gradientes constantes (≈1 o mayores) que hacen posible entrenar 4 capas tan rápido como 1 capa. Tanh mostró un desempeño sorprendentemente bueno al estar centrada en cero, acercándose a ReLU en MNIST y Housing, pero sigue siendo vulnerable a la saturación en redes muy profundas. Recomendación final: usar Inicialización He + ReLU como configuración por defecto; Sigmoide debe limitarse solo a la capa de salida en clasificación binaria y nunca a capas ocultas profundas."
+                },
+                exp5: {
+                    title: "EXPERIMENTO 5: VARIACIÓN EN EL LEARNING RATE",
+                    desc: "",
+                    img: "Ex5MNIST.jpeg", // <--- PON TU IMAGEN CON ESTE NOMBRE
+                    analysis: "El experimento en MNIST evidenció la extrema sensibilidad de las redes neuronales profundas de alta dimensionalidad ante el Learning Rate. La tasa de eta=0.1 se coronó como la configuración óptima, logrando una convergencia casi inmediata al 94% y finalizando en un 98% de precisión. Por el contrario, la tasa conservadora (eta=0.001) mostró una ineficiencia notable, requiriendo un coste computacional mucho mayor para alcanzar apenas un 92%. Las tasas agresivas eta > 1.5) resultaron en un fallo catastrófico inmediato: la precisión se estancó en el azar estadístico (10%) y los gradientes desaparecieron por desbordamiento numérico (NaN) desde la primera iteración. Se concluye que en arquitecturas profundas (Deep Learning) aplicadas a visión artificial, el margen de maniobra para el Learning Rate es estrecho. Existe una frontera crítica donde el modelo pasa de un aprendizaje eficiente a una destrucción matemática total. La combinación de ReLU + Profundidad + Alto Learning Rate es una fórmula garantizada para la inestabilidad numérica (Explosión del Gradiente). Por tanto, la estrategia recomendada es iniciar con tasas moderadas (10^-1) y aplicar técnicas de reducción de tasa (decay) si se detecta inestabilidad, evitando estrictamente valores superiores a 1.0."
+                }
+            }
+        };
+
+function updateExp(ds) {
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + ds).classList.add('active');
+
+    const content = data[ds];
+    const container = document.getElementById('dynamic-exp-content');
+
+    // 1. Iniciamos el HTML con el título del Dataset
+    let htmlContent = `
+        <div class="fade-in">
+            <h4 class="text-3xl font-bold mb-8 text-center" style="color: ${content.color}">${content.name}</h4>
+    `;
+
+    // 2. AGREGAR BLOQUE DE CÓDIGO SOLO PARA DIABETES
+        if (ds === 'diabetes') {
+        htmlContent += `
+            <div class="max-w-3xl mx-auto mb-16">
+                <p class="text-[10px] font-black uppercase text-gray-400 mb-4 tracking-[0.2em] text-center">Lógica de Inicialización en Python (NumPy)</p>
+                <div class="code-window shadow-2xl">
+                    <span class="text-pink-400">if</span> initialization == <span class="text-yellow-200">'zeros'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.biases.append(np.zeros((y, <span class="text-blue-300">1</span>)))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.weights.append(np.zeros((y, x)))<br>
+
+                    <span class="text-pink-400">elif</span> initialization == <span class="text-yellow-200">'standard'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.biases.append(np.random.randn(y, <span class="text-blue-300">1</span>))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.weights.append(np.random.randn(y, x))<br>
+
+                    <span class="text-pink-400">elif</span> initialization == <span class="text-yellow-200">'xavier'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.biases.append(np.random.randn(y, <span class="text-blue-300">1</span>))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.weights.append(np.random.randn(y, x) * np.sqrt(<span class="text-blue-300">1.0</span>/x))<br>
+
+                    <span class="text-pink-400">elif</span> initialization == <span class="text-yellow-200">'he'</span>:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.biases.append(np.random.randn(y, <span class="text-blue-300">1</span>))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;self.weights.append(np.random.randn(y, x) * np.sqrt(<span class="text-blue-300">2.0</span>/x))
+                </div>
+            </div>
+        `;
+    }
+
+    // 3. Iterar sobre los experimentos del objeto data
+    Object.keys(content).forEach(key => {
+        if (key.startsWith('exp')) {
+            const exp = content[key];
+            htmlContent += `
+                <div class="mb-20">
+                    <h5 class="text-2xl font-bold mb-4 uppercase">${exp.title}</h5>
+                    <p class="text-gray-500 mb-6">${exp.desc}</p>
+                    <div class="exp-image-box">
+                        <img src="${exp.img}" onerror="this.src='https://via.placeholder.com/800x400?text=Imagen:+${exp.img}'">
+                    </div>
+                    <div class="glass p-6 rounded-2xl border-none shadow-sm mb-10">
+                        <span class="text-[10px] font-black uppercase text-blue-600 tracking-tighter mb-2 block">Insights Técnicos</span>
+                        <p class="text-gray-700 leading-relaxed italic text-sm">"${exp.analysis}"</p>
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    htmlContent += `</div>`;
+    container.innerHTML = htmlContent;
+}
+
+        // Cargar diabetes por defecto
+        window.onload = () => updateExp('diabetes');
+    </script>
+</body>
+</html>
